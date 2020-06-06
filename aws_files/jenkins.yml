@@ -1,0 +1,59 @@
+Description: >
+  Paraskevas Tsantarliotis / Udacity Cloud DevOps Nanodegree
+  CloudFormation file to create a EC2 instance with Jenkins installed.
+Parameters:
+  Capstone:
+    Description: An Enviroment name to tag resources
+    Type: String
+
+  SourceIP:
+    Description: My IP address which will be allowed to access instance via SSH
+    Type: String
+    Default: IP/32
+
+  JenkinsSSHKey:
+    Description: SSH key name to access jenkins host
+    Type: "AWS::EC2::KeyPair::KeyName"
+
+Resources:
+  JenkinsSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow all access to HTTP:8080 and SHH access only from my IP to ec2
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub ${SourceIP}
+      Tags:
+        - Key: Name
+          Value: !Sub ${Capstone}-SG
+
+  JenkinsEc2:
+    Type: AWS::EC2::Instance
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt-get update -y
+          sudo apt-get install default-jdk wget -y
+          cd /home/ubuntu
+          wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+          sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+          sudo apt-get update -y
+          sudo apt-get install jenkins tidy -y
+          sudo systemctl status jenkins
+      SecurityGroupIds:
+        - Ref: JenkinsSG
+      ImageId: ami-0d1cd67c26f5fca19
+      InstanceType: t2.micro
+      KeyName: !Sub ${JenkinsSSHKey}
+
+Outputs:
+  Website:
+    Description: The Public DNS for the EC2 Instance
+    Value: !Join ['', ['http://', !GetAtt 'JenkinsEc2.PublicDnsName', ':8080']]

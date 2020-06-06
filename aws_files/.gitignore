@@ -1,0 +1,2 @@
+# igone jenkins server parameters, because it may contain sensitive data
+jenkins_parameters.json
