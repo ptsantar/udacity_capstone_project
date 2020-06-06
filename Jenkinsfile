@@ -38,7 +38,7 @@ pipeline {
 
         stage('Deploy Docker Container') {
             steps {
-                sh 'docker run --name udacitycapstone -d -p 80:80 ' + registry + ":$BUILD_NUMBER"
+                sh 'docker run --name udacitycapstone -d -p 3080:80 ' + registry + ":$BUILD_NUMBER"
             }
         }
     }
