@@ -12,3 +12,5 @@ In this project, I am developing a CI/CD pipeline for micro services application
 
 ## Step 1
 
+## TODO
+ - `jenkins.yml`: software installation for Jenkins fails due to GPG key, requires manual work. Add installation of hadolint (v 1.17.6) and docker
