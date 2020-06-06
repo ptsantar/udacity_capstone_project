@@ -16,29 +16,30 @@ pipeline {
                 sh 'tidy -q -e my_site/*.html'
             }
         }
-    }
     
-    stage('Building Docker Image') {
-        steps{
-            script {
-                dockerImage = docker.build registry + ":$BUILD_NUMBER"
-            }
-        }
-    }
-
-    stage('Push Docker Image') {
-        steps{
-            script {
-                docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push()
+    
+        stage('Building Docker Image') {
+            steps{
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
-    }
 
-    stage('Deploy Docker Container') {
-        steps {
-            sh 'docker run -it -p 8080:80 ' + dockerImage
+        stage('Push Docker Image') {
+            steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Docker Container') {
+            steps {
+                sh 'docker run -it -p 8080:80 ' + dockerImage
+            }
         }
     }
 
