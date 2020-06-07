@@ -22,7 +22,7 @@ pipeline {
         stage('Building Docker Image') {
             steps{
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build registry + ":latest"
                 }
             }
         }
@@ -39,15 +39,15 @@ pipeline {
 
         stage('Deploy Docker Container') {
             steps {
-                sh 'docker run --name udacitycapstone -d -p 3080:80 ' + registry + ":$BUILD_NUMBER"
+                sh 'docker run --name udacitycapstone -d -p 3080:80 ' + registry + ":latest"
             }
         }
 
         stage('Stop and Remove Docker Image') {
             steps{
-                sh 'docker stop \$(docker ps -a | grep ' + registry + ":$BUILD_NUMBER | cut -d \' \' -f 1)"
-                sh 'docker rm \$(docker ps -a | grep ' + registry + ":$BUILD_NUMBER | cut -d \' \' -f 1)"
-                sh "docker rmi $registry:$BUILD_NUMBER"
+                sh 'docker stop \$(docker ps -a | grep ' + registry + ":latest | cut -d \' \' -f 1)"
+                sh 'docker rm \$(docker ps -a | grep ' + registry + ":latest | cut -d \' \' -f 1)"
+                sh "docker rmi $registry:latest"
             }
         }
 
