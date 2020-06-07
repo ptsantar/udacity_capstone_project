@@ -45,9 +45,9 @@ pipeline {
 
         stage('Stop and Remove Docker Image') {
             steps{
-                containerId = sh(returnStdout: true, script: 'cont_id=docker ps -a | grep \"" + registry + ":$BUILD_NUMBER\" | cut -d \' \' -f 1').trim()
-                sh "docker stop " + containerId
-                sh "docker rm " + containerId
+                // containerId = sh(returnStdout: true, script: 'cont_id=docker ps -a | grep \"" + registry + ":$BUILD_NUMBER\" | cut -d \' \' -f 1').trim()
+                // sh "docker stop " + containerId
+                // sh "docker rm " + containerId
                 sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
