@@ -3,6 +3,7 @@ pipeline {
         registry = "ptsantar/udacity_cloud_devops_capstone"
         registryCredential = 'dockerhub'
         dockerImage = ''
+        containerId = ''
     }
 
     agent any
@@ -39,6 +40,15 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 sh 'docker run --name udacitycapstone -d -p 3080:80 ' + registry + ":$BUILD_NUMBER"
+            }
+        }
+
+        stage('Stop and Remove Docker Image') {
+            steps{
+                sh 'cont_id=docker ps -a | grep "ptsantar/udacity_cloud_devops_capstone:15" | cut -d ' ' -f 1'
+                sh "docker stop $cont_id"
+                sh "docker rm $cont_id"
+                sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
     }
