@@ -56,10 +56,10 @@ pipeline {
                 dir('aws_files') {
                     withAWS(region:'us-west-2', credentials:'udacity1') {
                         sh 'aws --region us-west-2 eks update-kubeconfig --name mycluster'
-                        sh 'kubectl apply -f ./controller.json'
+                        sh 'kubectl apply -f controller.json'
                         sh 'kubectl get pods'
                         input "Ready to deploy the loadbalancer?"
-                        sh 'kubectl apply -f ./service.json'
+                        sh 'kubectl apply -f service.json'
                         sh 'kubectl get services'
                     }
                 }
