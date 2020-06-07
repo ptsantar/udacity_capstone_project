@@ -45,8 +45,8 @@ pipeline {
 
         stage('Stop and Remove Docker Image') {
             steps{
-                sh "docker stop $(docker ps -a | grep \"" + registry + ":$BUILD_NUMBER\" | cut -d \' \' -f 1)"
-                sh "docker rm $(docker ps -a | grep \"" + registry + ":$BUILD_NUMBER\" | cut -d \' \' -f 1)"
+                sh "docker stop $(docker ps -a | grep \"$registry:$BUILD_NUMBER\" | cut -d \' \' -f 1)"
+                sh "docker rm $(docker ps -a | grep \"$registry:$BUILD_NUMBER\" | cut -d \' \' -f 1)"
                 sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
