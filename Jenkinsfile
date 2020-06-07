@@ -50,6 +50,20 @@ pipeline {
                 sh "docker rmi $registry:$BUILD_NUMBER"
             }
         }
+
+        stage('Deploy to AWS EKS Cluster'){
+            steps{
+                withAWS(region:'us-west-2', credentials:'udacity1') {
+                    sh 'aws --region us-west-2 eks update-kubeconfig --name mycluster'
+                    sh 'kubectl apply -f ./aws_files/controller.json'
+                    sh 'kubectl get pods'
+                    input "Ready to deploy the loadbalancer?"
+                    sh 'kubectl apply -f /aws_files/service.json'
+                    sh 'kubectl get services'
+                }
+                
+            }
+        }
     }
 
 }
