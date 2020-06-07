@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy to AWS EKS Cluster'){
             steps{
-                dir('k8s') {
+                dir('aws_files') {
                     withAWS(region:'us-west-2', credentials:'udacity1') {
                         sh 'aws --region us-west-2 eks update-kubeconfig --name mycluster'
                         sh 'kubectl apply -f ./controller.json'
