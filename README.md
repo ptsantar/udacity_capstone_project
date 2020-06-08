@@ -20,6 +20,7 @@ At first, the traffic from the Load balancer is redirected to blue pods (i.e, ma
 Created the GitHub repository that contains a directory (`my_site`) with a simple html file to be deployed. Then, created a Dockerfile and containerized the application. Also, test the docker image locally and pushed it in the Docker Hub.
 
 GitHub Repo: https://github.com/ptsantar/udacity_capstone_project
+
 DockerHub Repo: https://hub.docker.com/r/ptsantar/udacity_cloud_devops_capstone
 
 #### Step 2
